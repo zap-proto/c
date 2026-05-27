@@ -1,3 +1,6 @@
+
+> **Docs:** [ZAP C SDK](https://zap-proto.dev/docs/sdks/c) · part of the [ZAP Protocol](https://zap-proto.io)
+
 capnpc-c
 ========
 
