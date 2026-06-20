@@ -1,5 +1,5 @@
 /* vim: set sw=8 ts=8 sts=8 noet: */
-/* capn.c
+/* zap.c
  *
  * Copyright (C) 2013 James McKaskill
  *
@@ -11,7 +11,7 @@
 #pragma GCC diagnostic ignored "-Wmissing-field-initializers"
 #endif
 
-#include "capnp_c.h"
+#include "zap_c.h"
 
 #include <stdlib.h>
 #include <string.h>
@@ -1099,17 +1099,17 @@ capn_data capn_get_data(capn_ptr p, int off) {
 }
 
 #define SZ 8
-#include "capn-list.inc"
+#include "zap-list.inc"
 #undef SZ
 
 #define SZ 16
-#include "capn-list.inc"
+#include "zap-list.inc"
 #undef SZ
 
 #define SZ 32
-#include "capn-list.inc"
+#include "zap-list.inc"
 #undef SZ
 
 #define SZ 64
-#include "capn-list.inc"
+#include "zap-list.inc"
 #undef SZ

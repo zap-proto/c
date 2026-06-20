@@ -1,9 +1,8 @@
 /* example-test.cpp
  *
- * Some simple examples using c-capnproto.
+ * Some simple examples using c-zap.
  *
- * Based on the addressbook.capnp example in the capnproto C++ project:
- *  https://github.com/sandstorm-io/capnproto/blob/6816634a08b08bc8f52b4ee809afb58389f19655/c%2B%2B/samples/addressbook.capnp
+ * Based on the canonical addressbook.zap example schema.
  *
  * Copyright (C) 2017 Alex Helfet
  *
@@ -14,8 +13,8 @@
 #include <gtest/gtest.h>
 #include <cstdint>
 
-#include "capnp_c.h"
-#include "addressbook.capnp.h"
+#include "zap_c.h"
+#include "addressbook.zap.h"
 
 static capn_text chars_to_text(const char *chars) {
   return (capn_text) {
@@ -84,8 +83,10 @@ TEST(Examples, RoundTripPerson) {
   }
 
   {
-    // Write serialized object to file system.
-    FILE *f = fopen("tests/example-test.cpp.Person.out", "wb");
+    // Demonstrate writing the serialized object to a FILE*. Use tmpfile() so the
+    // test does not depend on the working directory (meson runs it from the build
+    // dir) and leaves no artifact behind.
+    FILE *f = tmpfile();
     ASSERT_NE(f, (void*)0);
     fwrite(buf, 1 /* size */, sz /* count */, f);
     int close_ret = fclose(f);

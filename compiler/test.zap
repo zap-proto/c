@@ -21,14 +21,14 @@
 
 @0xd508eebdc2dc42b8;
 
-using C = import "c.capnp";
-using Cxx = import "c++.capnp";
+using C = import "c.zap";
+using Cxx = import "c++.zap";
 
 $C.fieldgetset;
 
 # Use a namespace likely to cause trouble if the generated code doesn't use fully-qualified
-# names for stuff in the capnproto namespace.
-$Cxx.namespace("capnproto_test::capnp::test");
+# names for stuff in the zap namespace.
+$Cxx.namespace("zap_test::zap::test");
 
 enum TestEnum {
   foo @0;

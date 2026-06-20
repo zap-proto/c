@@ -1,5 +1,5 @@
 /* vim: set sw=8 ts=8 sts=8 noet: */
-/* capnp_c.h
+/* zap_c.h
  *
  * Copyright (C) 2013 James McKaskill
  * Copyright (C) 2014 Steve Dee
@@ -9,14 +9,14 @@
  */
 
 /*
- * functions / structures in this header are private to the capnproto-c
+ * functions / structures in this header are private to the zap-c
  * library;  applications should not call or use them.
  */
 
-#ifndef CAPNP_PRIV_H
-#define CAPNP_PRIV_H
+#ifndef ZAP_PRIV_H
+#define ZAP_PRIV_H
 
-#include "capnp_c.h"
+#include "zap_c.h"
 
 #if defined(__GNUC__) && __GNUC__ >= 4
 # define intern __attribute__((visibility ("internal")))
@@ -59,4 +59,4 @@ intern int capn_deflate(struct capn_stream*);
 intern int capn_inflate(struct capn_stream*);
 
 
-#endif /* CAPNP_PRIV_H */
+#endif /* ZAP_PRIV_H */

@@ -25,15 +25,15 @@ annotation nameinfix @0x85a8d86d736ba637 (file): Text;
 # add an infix (middle insert) for output file names
 #
 # "make" generally has implicit rules for compiling "foo.c" => "foo".  This
-# is very annoying with capnp since the rule will be "foo" => "foo.c", leading
+# is very annoying with zap since the rule will be "foo" => "foo.c", leading
 # to a loop.  $nameinfix (recommended parameter: "-gen") inserts its parameter
 # before the ".c", so the filename becomes "foo-gen.c"
 #
-# Alternatively, add this Makefile rule to disable compiling "foo.capnp.c" -> "foo.capnp":
-#   %.capnp: ;
+# Alternatively, add this Makefile rule to disable compiling "foo.zap.c" -> "foo.zap":
+#   %.zap: ;
 #
 #
-# ("foo" is really "foo.capnp", so it's foo.capnp-gen.c)
+# ("foo" is really "foo.zap", so it's foo.zap-gen.c)
 
 annotation fieldgetset @0xf72bc690355d66de (file): Void;
 # generate getter & setter functions for accessing fields

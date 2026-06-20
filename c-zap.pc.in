@@ -3,10 +3,10 @@ exec_prefix=@exec_prefix@
 libdir=@libdir@
 bindir=@bindir@
 includedir=@includedir@
-codegen=${bindir}/capnpc-c
+codegen=${bindir}/zapc-c
 
-Name: c-capnproto
-Description: Cap'n Proto C bindings
+Name: c-zap
+Description: ZAP C bindings
 Version: @PACKAGE_VERSION@
-Libs: -L${libdir} -lcapnp_c
+Libs: -L${libdir} -lzap_c
 Cflags: -I${includedir}

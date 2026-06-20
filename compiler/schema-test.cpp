@@ -6,7 +6,7 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-#include "schema.capnp.h"
+#include "schema.zap.h"
 #include <gtest/gtest.h>
 
 static const uint8_t simple_schema[] = {

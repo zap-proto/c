@@ -1,5 +1,5 @@
 /* vim: set sw=8 ts=8 sts=8 noet: */
-/* capn-malloc.c
+/* zap-malloc.c
  *
  * Copyright (C) 2013 James McKaskill
  * Copyright (C) 2014 Steve Dee
@@ -12,8 +12,8 @@
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 #endif
 
-#include "capnp_c.h"
-#include "capnp_priv.h"
+#include "zap_c.h"
+#include "zap_priv.h"
 #include <stdlib.h>
 #include <string.h>
 #include <limits.h>
@@ -117,7 +117,7 @@ static int read_fp(void *p, size_t sz, FILE *f, struct capn_stream *z, uint8_t* 
 static int init_fp(struct capn *c, FILE *f, struct capn_stream *z, int packed) {
 	/*
 	 * Initialize 'c' from the contents of 'f', assuming the message has been
-	 * serialized with the standard framing format. From https://capnproto.org/encoding.html:
+	 * serialized with the standard framing format:
 	 *
 	 * When transmitting over a stream, the following should be sent. All integers are unsigned and little-endian.
 	 *   (4 bytes) The number of segments, minus one (since there is always at least one segment).

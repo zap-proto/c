@@ -1,49 +1,49 @@
-project('capnp-c', ['c','cpp'], meson_version: '>=1.0.0', default_options : ['c_std=c99', 'cpp_std=c++14'])
+project('zap-c', ['c','cpp'], meson_version: '>=1.0.0', default_options : ['c_std=c99', 'cpp_std=c++17'])
 
 cc = meson.get_compiler('c')
 
 common_c_args = []
-common_cpp_args = ['-std=c++14']
-libcapnp_c_args = []
-libcapnp_src = [
-  'lib' / 'capn-malloc.c',
-  'lib' / 'capn-stream.c',
-  'lib' / 'capn.c',
+common_cpp_args = ['-std=c++17']
+libzap_c_args = []
+libzap_src = [
+  'lib' / 'zap-malloc.c',
+  'lib' / 'zap-stream.c',
+  'lib' / 'zap.c',
 ]
 
-libcapnp = library('capnp', libcapnp_src,
-    c_args : common_c_args + libcapnp_c_args,
+libzap = library('zap', libzap_src,
+    c_args : common_c_args + libzap_c_args,
     dependencies: [],
     implicit_include_directories: false,
     include_directories: include_directories(['compiler', 'lib'])
 )
 
-libcapnp_dep = declare_dependency(
-    link_with: libcapnp,
+libzap_dep = declare_dependency(
+    link_with: libzap,
     dependencies: [],
     include_directories: include_directories(['compiler', 'lib'])
 )
 
-capnpc_src = [
-  'compiler' / 'capnpc-c.c',
-  'compiler' / 'schema.capnp.c',
+zapc_src = [
+  'compiler' / 'zapc-c.c',
+  'compiler' / 'schema.zap.c',
   'compiler' / 'str.c'
 ]
 
-capnpc_c = executable('capnpc-c', capnpc_src,
+zapc_c = executable('zapc-c', zapc_src,
       include_directories: include_directories(['lib']),
-      dependencies: [libcapnp_dep],
+      dependencies: [libzap_dep],
       c_args : common_c_args,
 )
 
-capn_test_src = [
-  'tests' / 'capn-test.cpp',
-  'tests' / 'capn-stream-test.cpp',
+zap_test_src = [
+  'tests' / 'zap-test.cpp',
+  'tests' / 'zap-stream-test.cpp',
   'tests' / 'example-test.cpp',
-  'tests' / 'addressbook.capnp.c',
-  'compiler' / 'test.capnp.c',
+  'tests' / 'addressbook.zap.c',
+  'compiler' / 'test.zap.c',
   'compiler' / 'schema-test.cpp',
-  'compiler' / 'schema.capnp.c'
+  'compiler' / 'schema.zap.c'
 ]
 
 if get_option('enable_tests') and not meson.is_subproject()
@@ -54,7 +54,7 @@ if get_option('enable_tests') and not meson.is_subproject()
   gtest_dep = gtest_proj.get_variable('gtest_dep')
   gmock_dep = gtest_proj.get_variable('gmock_dep')
 
-  test_dependencies = [libcapnp_dep, gtest_dep, gmock_dep, thread_dep]
+  test_dependencies = [libzap_dep, gtest_dep, gmock_dep, thread_dep]
 
   if get_option('b_sanitize').contains('address')
     test_dependencies += cc.find_library('asan')
@@ -63,7 +63,7 @@ if get_option('enable_tests') and not meson.is_subproject()
     test_dependencies += cc.find_library('ubsan')
   endif
 
-  exe = executable('capn-test', capn_test_src,
+  exe = executable('zap-test', zap_test_src,
       include_directories: include_directories(['lib', 'tests', 'compiler']),
       dependencies: test_dependencies,
       c_args : common_c_args,
@@ -72,6 +72,6 @@ if get_option('enable_tests') and not meson.is_subproject()
       install_rpath: '',
       implicit_include_directories: false
     )
-  test('capn-test', exe)
+  test('zap-test', exe)
 
 endif

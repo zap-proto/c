@@ -1,4 +1,4 @@
-/* capnpc-c.c
+/* zapc-c.c
  *
  * Copyright (C) 2013 James McKaskill
  *
@@ -7,7 +7,7 @@
  */
 #define _POSIX_C_SOURCE 200809L
 
-#include "schema.capnp.h"
+#include "schema.zap.h"
 #include "str.h"
 #include <stdbool.h>
 #include <stdlib.h>
@@ -852,7 +852,7 @@ static void do_union(struct strings *s, struct node *n, struct field *first_fiel
 	union_cases(s, n, first_field, (1 << Type_data));
 	union_cases(s, n, first_field, (1 << Type__struct) | (1 << Type__interface) | (1 << Type_anyPointer) | (1 << Type__list));
 
-	str_addf(&s->decl, "%scapnp_nowarn union {\n", s->dtab.str);
+	str_addf(&s->decl, "%szap_nowarn union {\n", s->dtab.str);
 	str_add(&s->dtab, "\t", -1);
 
 	/* when we have defaults or groups we have to emit each case seperately */
@@ -980,7 +980,7 @@ static void define_group(struct strings *s, struct node *n, const char *group_na
 	}
 
 	if (named_struct) {
-		str_addf(&s->decl, "%scapnp_nowarn struct {\n", s->dtab.str);
+		str_addf(&s->decl, "%szap_nowarn struct {\n", s->dtab.str);
 		str_add(&s->dtab, "\t", 1);
 	}
 
@@ -1017,7 +1017,7 @@ static void define_group(struct strings *s, struct node *n, const char *group_na
 		{
 			// When we are already inside a union, so we need to enclose the union
 			// with its disciminant.
-			str_addf(&s->decl, "%scapnp_nowarn struct {\n", s->dtab.str);
+			str_addf(&s->decl, "%szap_nowarn struct {\n", s->dtab.str);
 			str_add(&s->dtab, "\t", 1);
 		}
 
@@ -1075,7 +1075,7 @@ static void define_struct(struct node *n) {
 	str_add(&HDR, s.enums.str, s.enums.len);
 
 	str_addf(&HDR, "\n%sstruct %s {\n",
-			s.decl.len == 0 ? "capnp_nowarn " : "",
+			s.decl.len == 0 ? "zap_nowarn " : "",
 			n->name.str);
 	str_add(&HDR, s.decl.str, s.decl.len);
 	str_addf(&HDR, "};\n");
@@ -1115,13 +1115,13 @@ static void define_struct(struct node *n) {
 	str_addf(&SRC, "\treturn p;\n");
 	str_addf(&SRC, "}\n");
 
-	str_addf(&SRC, "void read_%s(struct %s *s capnp_unused, %s_ptr p) {\n", n->name.str, n->name.str, n->name.str);
-	str_addf(&SRC, "\tcapn_resolve(&p.p);\n\tcapnp_use(s);\n");
+	str_addf(&SRC, "void read_%s(struct %s *s zap_unused, %s_ptr p) {\n", n->name.str, n->name.str, n->name.str);
+	str_addf(&SRC, "\tcapn_resolve(&p.p);\n\tzap_use(s);\n");
 	str_add(&SRC, s.get.str, s.get.len);
 	str_addf(&SRC, "}\n");
 
-	str_addf(&SRC, "void write_%s(const struct %s *s capnp_unused, %s_ptr p) {\n", n->name.str, n->name.str, n->name.str);
-	str_addf(&SRC, "\tcapn_resolve(&p.p);\n\tcapnp_use(s);\n");
+	str_addf(&SRC, "void write_%s(const struct %s *s zap_unused, %s_ptr p) {\n", n->name.str, n->name.str, n->name.str);
+	str_addf(&SRC, "\tcapn_resolve(&p.p);\n\tzap_use(s);\n");
 	str_add(&SRC, s.set.str, s.set.len);
 	str_addf(&SRC, "}\n");
 
@@ -1494,15 +1494,15 @@ int main() {
 		str_addf(&HDR, "#ifndef CAPN_%X%X\n", (uint32_t) (file_node->n.id >> 32), (uint32_t) file_node->n.id);
 		str_addf(&HDR, "#define CAPN_%X%X\n", (uint32_t) (file_node->n.id >> 32), (uint32_t) file_node->n.id);
 		str_addf(&HDR, "/* AUTO GENERATED - DO NOT EDIT */\n");
-		str_addf(&HDR, "#include <capnp_c.h>\n\n");
+		str_addf(&HDR, "#include <zap_c.h>\n\n");
 		str_addf(&HDR, "#if CAPN_VERSION != 1\n");
-		str_addf(&HDR, "#error \"version mismatch between capnp_c.h and generated code\"\n");
+		str_addf(&HDR, "#error \"version mismatch between zap_c.h and generated code\"\n");
 		str_addf(&HDR, "#endif\n\n");
-		str_addf(&HDR, "#ifndef capnp_nowarn\n"
+		str_addf(&HDR, "#ifndef zap_nowarn\n"
 				"# ifdef __GNUC__\n"
-				"#  define capnp_nowarn __extension__\n"
+				"#  define zap_nowarn __extension__\n"
 				"# else\n"
-				"#  define capnp_nowarn\n"
+				"#  define zap_nowarn\n"
 				"# endif\n"
 				"#endif\n\n");
 
@@ -1584,11 +1584,11 @@ int main() {
 		fprintf(srcf, "#include \"%s%s.h\"\n", p ? p+1 : file_node->n.displayName.str, nameinfix);
 		fprintf(srcf, "/* AUTO GENERATED - DO NOT EDIT */\n");
 		fprintf(srcf, "#ifdef __GNUC__\n"
-				"# define capnp_unused __attribute__((unused))\n"
-				"# define capnp_use(x) (void) x;\n"
+				"# define zap_unused __attribute__((unused))\n"
+				"# define zap_use(x) (void) x;\n"
 				"#else\n"
-				"# define capnp_unused\n"
-				"# define capnp_use(x)\n"
+				"# define zap_unused\n"
+				"# define zap_use(x)\n"
 				"#endif\n\n");
 
 

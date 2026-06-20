@@ -1,7 +1,7 @@
 AC_PREREQ(2.60)
 
-AC_INIT(c-capnproto, 0.3, [])
-AC_CONFIG_SRCDIR(lib/capnp_c.h)
+AC_INIT(c-zap, 0.3, [])
+AC_CONFIG_SRCDIR(lib/zap_c.h)
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_AUX_DIR([ac])
 
@@ -31,23 +31,23 @@ if test x"${enable_werror}" = x"yes" ; then
 fi
 AC_SUBST(WERROR)
 
-AC_ARG_WITH(capnpdir,
-  AS_HELP_STRING([--with-capnpdir=DIR], [directory to install c.capnp file in (default: $includedir/capnp)]))
-if test x"${with_capnpdir}" != x ; then
-  capnpdir="${with_capnpdir}"
+AC_ARG_WITH(zapdir,
+  AS_HELP_STRING([--with-zapdir=DIR], [directory to install c.zap file in (default: $includedir/zap)]))
+if test x"${with_zapdir}" != x ; then
+  zapdir="${with_zapdir}"
 else
-  capnpdir="${includedir}/capnp"
+  zapdir="${includedir}/zap"
 fi
-AC_SUBST(capnpdir)
+AC_SUBST(zapdir)
 
-#PKG_CHECK_MODULES(CAPNP, [capnp >= 0.5.2], [], [
-#  AC_MSG_ERROR([capnproto base package (0.5.2 or newer) not found])
+#PKG_CHECK_MODULES(ZAP, [zap >= 0.5.2], [], [
+#  AC_MSG_ERROR([zap base package (0.5.2 or newer) not found])
 #])
 
 AC_CONFIG_SUBDIRS([gtest/googletest])
 
 AC_CONFIG_FILES([
 	Makefile
-	c-capnproto.pc
+	c-zap.pc
 ])
 AC_OUTPUT

@@ -1,4 +1,4 @@
-/* capn-stream-test.cpp
+/* zap-stream-test.cpp
  *
  * Copyright (C) 2013 James McKaskill
  * Copyright (C) 2014 Steve Dee
@@ -7,7 +7,7 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-#include "capn-stream.c"
+#include "zap-stream.c"
 #include <gtest/gtest.h>
 
 template <int wordCount>

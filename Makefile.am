@@ -11,44 +11,44 @@ include_HEADERS =
 
 EXTRA_DIST += README.md
 
-EXTRA_DIST += c-capnproto.pc.in
+EXTRA_DIST += c-zap.pc.in
 pkgconfigdir = $(libdir)/pkgconfig
-pkgconfig_DATA = c-capnproto.pc
+pkgconfig_DATA = c-zap.pc
 
-EXTRA_DIST += compiler/c.capnp
-capnp_DATA = compiler/c.capnp
+EXTRA_DIST += compiler/c.zap
+zap_DATA = compiler/c.zap
 AM_CPPFLAGS = \
 	-I${srcdir}/compiler \
 	-I${srcdir}/lib
 
-lib_LTLIBRARIES += libcapnp_c.la
-libcapnp_c_la_LDFLAGS = -version-info 0:0:0
-libcapnp_c_la_SOURCES = \
-	lib/capn-malloc.c \
-	lib/capn-stream.c \
-	lib/capn.c
+lib_LTLIBRARIES += libzap_c.la
+libzap_c_la_LDFLAGS = -version-info 0:0:0
+libzap_c_la_SOURCES = \
+	lib/zap-malloc.c \
+	lib/zap-stream.c \
+	lib/zap.c
 EXTRA_DIST += \
-	lib/capn-list.inc
+	lib/zap-list.inc
 
-bin_PROGRAMS += capnpc-c
-capnpc_c_SOURCES = \
-	compiler/capnpc-c.c \
-	compiler/schema.capnp.c \
+bin_PROGRAMS += zapc-c
+zapc_c_SOURCES = \
+	compiler/zapc-c.c \
+	compiler/schema.zap.c \
 	compiler/str.c
-capnpc_c_LDADD = libcapnp_c.la
+zapc_c_LDADD = libzap_c.la
 include_HEADERS += \
-	lib/capnp_c.h
+	lib/zap_c.h
 
 noinst_HEADERS += \
-	lib/capnp_priv.h \
+	lib/zap_priv.h \
 	compiler/str.h \
-	compiler/schema.capnp.h \
-	compiler/c.capnp.h \
-	compiler/c++.capnp.h
+	compiler/schema.zap.h \
+	compiler/c.zap.h \
+	compiler/c++.zap.h
 
-# Don't try to generate any *.capnp files. Otherwise make wants to compile them
-# from *.capnp.c and fails.
-%.capnp: ;
+# Don't try to generate any *.zap files. Otherwise make wants to compile them
+# from *.zap.c and fails.
+%.zap: ;
 
 # googletest
 GTEST_LDADD = gtest/googletest/lib/libgtest.la
@@ -59,36 +59,36 @@ DIST_SUBDIRS = gtest/googletest
 
 # Tests
 check_PROGRAMS += \
-	capn-test
-capn_test_SOURCES = \
-	tests/capn-test.cpp \
-	tests/capn-stream-test.cpp \
+	zap-test
+zap_test_SOURCES = \
+	tests/zap-test.cpp \
+	tests/zap-stream-test.cpp \
 	tests/example-test.cpp \
-	tests/addressbook.capnp.c \
-	compiler/test.capnp.c \
+	tests/addressbook.zap.c \
+	compiler/test.zap.c \
 	compiler/schema-test.cpp \
-	compiler/schema.capnp.c
+	compiler/schema.zap.c
 noinst_HEADERS += \
-	compiler/test.capnp.h \
-	tests/addressbook.capnp.h
+	compiler/test.zap.h \
+	tests/addressbook.zap.h
 EXTRA_DIST += \
-	compiler/c.capnp \
-	compiler/c++.capnp \
-	compiler/schema.capnp \
-	compiler/test.capnp \
-	tests/addressbook.capnp
-capn_test_CPPFLAGS = $(AM_CPPFLAGS) $(GTEST_CPPFLAGS)
-capn_test_CXXFLAGS = -std=gnu++11 -pthread
-capn_test_LDADD = libcapnp_c.la $(GTEST_LDADD)
-capn_test_LDFLAGS = -pthread
-TESTS = capn-test
+	compiler/c.zap \
+	compiler/c++.zap \
+	compiler/schema.zap \
+	compiler/test.zap \
+	tests/addressbook.zap
+zap_test_CPPFLAGS = $(AM_CPPFLAGS) $(GTEST_CPPFLAGS)
+zap_test_CXXFLAGS = -std=gnu++17 -pthread
+zap_test_LDADD = libzap_c.la $(GTEST_LDADD)
+zap_test_LDFLAGS = -pthread
+TESTS = zap-test
 
-CAPNP_SCHEMA_FILES := $(shell find . -type f -name \*.capnp)
+ZAP_SCHEMA_FILES := $(shell find . -type f -name \*.zap)
 
-CAPNP ?= capnp
-.PHONY: capnp-compile
-capnp-compile:
-	$(CAPNP) compile \
-		--output=./capnpc-c \
+ZAP ?= zap
+.PHONY: zap-compile
+zap-compile:
+	$(ZAP) compile \
+		--output=./zapc-c \
 		-Icompiler \
-		$(CAPNP_SCHEMA_FILES)
+		$(ZAP_SCHEMA_FILES)

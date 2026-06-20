@@ -1,13 +1,13 @@
 #ifndef CAPN_9EB32E19F86EE174
 #define CAPN_9EB32E19F86EE174
 /* AUTO GENERATED - DO NOT EDIT */
-#include <capnp_c.h>
+#include <zap_c.h>
 
 #if CAPN_VERSION != 1
-#error "version mismatch between capnp_c.h and generated code"
+#error "version mismatch between zap_c.h and generated code"
 #endif
 
-#include "c.capnp.h"
+#include "c.zap.h"
 
 #ifdef __cplusplus
 extern "C" {

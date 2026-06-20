@@ -1,21 +1,11 @@
 
 > **Docs:** [ZAP C SDK](https://zap-proto.dev/docs/sdks/c) · part of the [ZAP Protocol](https://zap-proto.io)
 
-capnpc-c
+zapc-c
 ========
 
-This is a C plugin for [Cap'n Proto](http://kentonv.github.io/capnproto), an
-efficient protocol for sharing data and capabilities.
-
-## UNMAINTAINED
-
-This project is currently **NOT MAINTAINED**.  If you are interested in
-taking over maintenance and/or need this for some project, please look at
-issue https://github.com/opensourcerouting/c-capnproto/issues/55
-
-No releases will be made.  PRs may sit unreviewed for multiple years.  **PRs
-MAY get merged WITHOUT ANY REVIEW, as a last ditch attempt to not waste
-people's efforts on PRs.  This means things may break completely.**
+This is the C language plugin (`zapc-c`) and runtime for [ZAP](https://zap-proto.io),
+an efficient protocol for sharing data and capabilities.
 
 > ## Security warning!
 
@@ -23,21 +13,14 @@ people's efforts on PRs.  This means things may break completely.**
 > untrusted input! There is currently no code in place to check if
 > structures/pointers are within bounds.
 
-This is only the code generator plugin, to properly make use of it you
-need to download, build and install capnpc and then build and install
-this project and then you can utilize it as:
-
-```sh
-capnpc compiler/test.capnp -oc
-```
-
-[![Build Status](https://travis-ci.org/opensourcerouting/c-capnproto.svg?branch=master)](https://travis-ci.org/opensourcerouting/c-capnproto)
+This repository contains the code generator plugin together with the runtime
+library required to use it.
 
 ## Building on Linux
 
 ```sh
-git clone --recurse-submodules https://github.com/opensourcerouting/c-capnproto
-cd c-capnproto
+git clone --recurse-submodules git@github.com:zap-proto/c.git zap-c
+cd zap-c
 autoreconf -f -i -s
 ./configure
 make
@@ -47,37 +30,41 @@ make check
 ## Building with Meson
 
 ```sh
-git clone --recurse-submodules https://github.com/opensourcerouting/c-capnproto
-cd c-capnproto
+git clone --recurse-submodules git@github.com:zap-proto/c.git zap-c
+cd zap-c
 meson setup build
 meson compile -C build
-build/capn-test
+build/zap-test
 ```
 
 ## Usage
 
-### Generating C code from a `.capnp` schema file
+### Generating C code from a `.zap` schema file
 
-The `compiler` directory contains the C language plugin (`capnpc-c`) for use with the `capnp` tool: https://capnproto.org/capnp-tool.html.
+The `compiler` directory contains the C language plugin (`zapc-c`) for use with
+the `zap` tool.
 
-`capnp` will by default search `$PATH` for `capnpc-c` - if it's on your PATH, you can generate code for your schema as follows:
+`zap` will by default search `$PATH` for `zapc-c` — if it's on your PATH, you
+can generate code for your schema as follows:
 
 ```sh
-capnp compile -o c myschema.capnp
+zap compile -o c myschema.zap
 ```
 
 Otherwise, you can specify the path to the c plugin:
 
 ```sh
-capnp compile -o ./capnpc-c myschema.capnp
+zap compile -o ./zapc-c myschema.zap
 ```
 
-`capnp` generates a C struct that corresponds to each capn proto struct, along with read/write functions that convert to/from capn proto form.
+`zap` generates a C struct that corresponds to each ZAP struct, along with
+read/write functions that convert to/from ZAP wire form.
 
-If you want accessor functions for struct members, use attribute  `fieldgetset` in your `.capnp` file as follows:
+If you want accessor functions for struct members, use attribute `fieldgetset`
+in your `.zap` file as follows:
 
-```capnp
-using C = import "${c-capnproto}/compiler/c.capnp";
+```zap
+using C = import "/c.zap";
 
 $C.fieldgetset;
 
@@ -87,37 +74,24 @@ struct MyStruct {}
 ### Example C code
 
 See the unit tests in [`tests/example-test.cpp`](tests/example-test.cpp).
-The example schema file is [`tests/addressbook.capnp`](tests/addressbook.capnp).
+The example schema file is [`tests/addressbook.zap`](tests/addressbook.zap).
 The tests are written in C++, but only use C features.
 
-You need to compile these runtime library files and link them into your own project's binaries:
+You need to compile these runtime library files and link them into your own
+project's binaries:
 
-* [`lib/capn.c`](lib/capn.c)
-* [`lib/capn-malloc.c`](lib/capn-malloc.c)
-* [`lib/capn-stream.c`](lib/capn-stream.c)
+* [`lib/zap.c`](lib/zap.c)
+* [`lib/zap-malloc.c`](lib/zap-malloc.c)
+* [`lib/zap-stream.c`](lib/zap-stream.c)
 
 Your include path must contain the runtime library directory
-[`lib`](lib). Header file [`lib/capnp_c.h`](lib/capnp_c.h) contains
-the public interfaces of the library.
+[`lib`](lib). Header file [`lib/zap_c.h`](lib/zap_c.h) contains the public
+interfaces of the library.
 
-Using make-based builds, make may try to compile `${x}.capnp` from
-`${x}.capnp.c` using its built-in rule for compiling `${y}` from
-`${y}.c`. You can either disable make's built-in compile rules or just
-this specific case with the no-op rule: `%.capnp: ;`.
+Using make-based builds, make may try to compile `${x}.zap` from `${x}.zap.c`
+using its built-in rule for compiling `${y}` from `${y}.c`. You can either
+disable make's built-in compile rules or just this specific case with the no-op
+rule: `%.zap: ;`.
 
-For further reference, please see the other unit tests in [`tests`](tests), and header file [`lib/capnp_c.h`](lib/capnp_c.h).
-
-The project [`quagga-capnproto`](https://github.com/opensourcerouting/quagga-capnproto) uses `c-capnproto` and contains some good examples, as found with [this github repository search](https://github.com/opensourcerouting/quagga-capnproto/search?utf8=%E2%9C%93&q=capn&type=):
-
-* Serialization in function [`bgp_notify_send()`](https://github.com/opensourcerouting/quagga-capnproto/blob/27061648f3418fac0d217b16a46add534343e841/bgpd/bgp_zmq.c#L81-L96) in file `quagga-capnproto/bgpd/bgp_zmq.c`
-* Deserialization in function [`qzc_callback()`](https://github.com/opensourcerouting/quagga-capnproto/blob/27061648f3418fac0d217b16a46add534343e841/lib/qzc.c#L249-L257) in file `quagga-capnproto/lib/qzc.c`
-
-## Status
-
-This is a merge of 3 forks of [James McKaskill's great
-work](https://github.com/jmckaskill/c-capnproto), which has been untouched for
-a while:
-
-- [liamstask's fork](https://github.com/liamstask/c-capnproto)
-- [baruch's fork](https://github.com/baruch/c-capnproto)
-- [kylemanna's fork](https://github.com/kylemanna/c-capnproto)
+For further reference, please see the other unit tests in [`tests`](tests), and
+header file [`lib/zap_c.h`](lib/zap_c.h).

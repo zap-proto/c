@@ -1,4 +1,4 @@
-#include "addressbook.capnp.h"
+#include "addressbook.zap.h"
 /* AUTO GENERATED - DO NOT EDIT */
 static const capn_text capn_val0 = {0,"",0};
 
