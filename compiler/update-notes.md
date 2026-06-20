@@ -1,18 +1,20 @@
 
-occasionally, it may be required to sync with upstream capn proto changes. some quick notes on the process i've used here, assuming the updated capnproto repo is at CAPNP_CPP:
+# Regenerating schema support
 
-    $ cp ${CAPNP_CPP}/c++/src/capnp/test.capnp .
-    $ cp ${CAPNP_CPP}/c++/src/capnp/schema.capnp .
-    $ cp ${CAPNP_CPP}/c++/src/capnp/c++.capnp .
+The files `schema.zap`, `c.zap`, and `c++.zap` define the ZAP schema and the
+C-plugin annotations. `schema.zap.c` / `schema.zap.h` are generated from
+`schema.zap` and must be regenerated whenever the schema changes.
 
-fix up `schema.capnp` to reference the in-tree copy of `c++.capnp` (ie, `using Cxx = import "c++.capnp";` at the top of the file)
+`schema.zap` references the in-tree copy of `c++.zap`
+(`using Cxx = import "c++.zap";` at the top of the file).
 
-then, regenerate the schema support:
+Regenerate the schema support:
 
-    $ capnp compile -o ./capnpc-c compiler/schema.capnp
+    $ zap compile -o ./zapc-c compiler/schema.zap
 
-now try to regenerate again, based on the previously regenerated schema.
+Then regenerate again, based on the previously regenerated schema, to confirm
+the output is stable (a fixpoint).
 
-you can always check the capnpc formatted output during debugging:
+You can always inspect the `zapc` formatted output during debugging:
 
-    $ capnp compile -ocapnpc-capnpc compiler/schema.capnp
+    $ zap compile -ozapc-zapc compiler/schema.zap

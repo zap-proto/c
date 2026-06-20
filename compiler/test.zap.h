@@ -1,17 +1,17 @@
 #ifndef CAPN_D508EEBDC2DC42B8
 #define CAPN_D508EEBDC2DC42B8
 /* AUTO GENERATED - DO NOT EDIT */
-#include <capnp_c.h>
+#include <zap_c.h>
 
 #if CAPN_VERSION != 1
-#error "version mismatch between capnp_c.h and generated code"
+#error "version mismatch between zap_c.h and generated code"
 #endif
 
-#ifndef capnp_nowarn
+#ifndef zap_nowarn
 # ifdef __GNUC__
-#  define capnp_nowarn __extension__
+#  define zap_nowarn __extension__
 # else
-#  define capnp_nowarn
+#  define zap_nowarn
 # endif
 #endif
 
@@ -715,7 +715,7 @@ enum TestUnion_union3_which {
 
 struct TestUnion {
 	enum TestUnion_union0_which union0_which;
-	capnp_nowarn union {
+	zap_nowarn union {
 		unsigned u0f0s1 : 1;
 		int8_t u0f0s8;
 		int16_t u0f0s16;
@@ -731,7 +731,7 @@ struct TestUnion {
 	} union0;
 	unsigned bit0 : 1;
 	enum TestUnion_union1_which union1_which;
-	capnp_nowarn union {
+	zap_nowarn union {
 		unsigned u1f0s1 : 1;
 		unsigned u1f1s1 : 1;
 		int8_t u1f0s8;
@@ -758,7 +758,7 @@ struct TestUnion {
 	unsigned bit6 : 1;
 	unsigned bit7 : 1;
 	enum TestUnion_union2_which union2_which;
-	capnp_nowarn union {
+	zap_nowarn union {
 		int64_t u2f0s64;
 		int32_t u2f0s32;
 		int16_t u2f0s16;
@@ -766,7 +766,7 @@ struct TestUnion {
 		unsigned u2f0s1 : 1;
 	} union2;
 	enum TestUnion_union3_which union3_which;
-	capnp_nowarn union {
+	zap_nowarn union {
 		int64_t u3f0s64;
 		int32_t u3f0s32;
 		int16_t u3f0s16;
@@ -822,7 +822,7 @@ enum TestUnnamedUnion_which {
 struct TestUnnamedUnion {
 	capn_text before;
 	enum TestUnnamedUnion_which which;
-	capnp_nowarn union {
+	zap_nowarn union {
 		uint16_t foo;
 		uint32_t bar;
 	};
@@ -851,10 +851,10 @@ enum TestUnionInUnion_outer_which {
 
 struct TestUnionInUnion {
 	enum TestUnionInUnion_outer_which outer_which;
-	capnp_nowarn union {
-		capnp_nowarn struct {
+	zap_nowarn union {
+		zap_nowarn struct {
 			enum TestUnionInUnion_outer_inner_which which;
-			capnp_nowarn union {
+			zap_nowarn union {
 				int32_t foo;
 				int32_t bar;
 			};
@@ -877,18 +877,18 @@ enum TestGroups_groups_which {
 
 struct TestGroups {
 	enum TestGroups_groups_which groups_which;
-	capnp_nowarn union {
-		capnp_nowarn struct {
+	zap_nowarn union {
+		zap_nowarn struct {
 			int32_t corge;
 			int64_t grault;
 			capn_text garply;
 		} foo;
-		capnp_nowarn struct {
+		zap_nowarn struct {
 			int32_t corge;
 			capn_text grault;
 			int64_t garply;
 		} bar;
-		capnp_nowarn struct {
+		zap_nowarn struct {
 			int32_t corge;
 			capn_text grault;
 			capn_text garply;
@@ -914,13 +914,13 @@ enum TestInterleavedGroups_group2_which {
 };
 
 struct TestInterleavedGroups {
-	capnp_nowarn struct {
+	zap_nowarn struct {
 		uint32_t foo;
 		uint64_t bar;
 		enum TestInterleavedGroups_group1_which which;
-		capnp_nowarn union {
+		zap_nowarn union {
 			uint16_t qux;
-			capnp_nowarn struct {
+			zap_nowarn struct {
 				uint64_t grault;
 				uint16_t garply;
 				capn_text plugh;
@@ -930,13 +930,13 @@ struct TestInterleavedGroups {
 		};
 		capn_text waldo;
 	} group1;
-	capnp_nowarn struct {
+	zap_nowarn struct {
 		uint32_t foo;
 		uint64_t bar;
 		enum TestInterleavedGroups_group2_which which;
-		capnp_nowarn union {
+		zap_nowarn union {
 			uint16_t qux;
-			capnp_nowarn struct {
+			zap_nowarn struct {
 				uint64_t grault;
 				uint16_t garply;
 				capn_text plugh;
@@ -1110,7 +1110,7 @@ void TestLists_set_textListList(TestLists_ptr p, capn_ptr textListList);
 
 void TestLists_set_structListList(TestLists_ptr p, capn_ptr structListList);
 
-capnp_nowarn struct TestLists_Struct0 {
+zap_nowarn struct TestLists_Struct0 {
 };
 
 static const size_t TestLists_Struct0_word_count = 0;
@@ -1400,13 +1400,13 @@ struct TestLateUnion {
 	capn_text bar;
 	int16_t baz;
 	enum TestLateUnion_theUnion_which theUnion_which;
-	capnp_nowarn union {
+	zap_nowarn union {
 		capn_text qux;
 		capn_list32 corge;
 		float grault;
 	} theUnion;
 	enum TestLateUnion_anotherUnion_which anotherUnion_which;
-	capnp_nowarn union {
+	zap_nowarn union {
 		capn_text qux;
 		capn_list32 corge;
 		float grault;
@@ -1498,7 +1498,7 @@ enum TestStructUnion_un_which {
 
 struct TestStructUnion {
 	enum TestStructUnion_un_which un_which;
-	capnp_nowarn union {
+	zap_nowarn union {
 		TestStructUnion_SomeStruct_ptr _struct;
 		TestAnyPointer_ptr object;
 	} un;
@@ -1591,7 +1591,7 @@ void TestWholeFloatDefault_set_field(TestWholeFloatDefault_ptr p, float field);
 
 void TestWholeFloatDefault_set_bigField(TestWholeFloatDefault_ptr p, float bigField);
 
-capnp_nowarn struct TestEmptyStruct {
+zap_nowarn struct TestEmptyStruct {
 };
 
 static const size_t TestEmptyStruct_word_count = 0;
@@ -1601,7 +1601,7 @@ static const size_t TestEmptyStruct_pointer_count = 0;
 static const size_t TestEmptyStruct_struct_bytes_count = 0;
 
 
-capnp_nowarn struct TestConstants {
+zap_nowarn struct TestConstants {
 };
 
 static const size_t TestConstants_word_count = 0;
@@ -1661,7 +1661,7 @@ enum TestSturdyRefObjectId_Tag TestSturdyRefObjectId_get_tag(TestSturdyRefObject
 
 void TestSturdyRefObjectId_set_tag(TestSturdyRefObjectId_ptr p, enum TestSturdyRefObjectId_Tag tag);
 
-capnp_nowarn struct TestProvisionId {
+zap_nowarn struct TestProvisionId {
 };
 
 static const size_t TestProvisionId_word_count = 0;
@@ -1671,7 +1671,7 @@ static const size_t TestProvisionId_pointer_count = 0;
 static const size_t TestProvisionId_struct_bytes_count = 0;
 
 
-capnp_nowarn struct TestRecipientId {
+zap_nowarn struct TestRecipientId {
 };
 
 static const size_t TestRecipientId_word_count = 0;
@@ -1681,7 +1681,7 @@ static const size_t TestRecipientId_pointer_count = 0;
 static const size_t TestRecipientId_struct_bytes_count = 0;
 
 
-capnp_nowarn struct TestThirdPartyCapId {
+zap_nowarn struct TestThirdPartyCapId {
 };
 
 static const size_t TestThirdPartyCapId_word_count = 0;
@@ -1691,7 +1691,7 @@ static const size_t TestThirdPartyCapId_pointer_count = 0;
 static const size_t TestThirdPartyCapId_struct_bytes_count = 0;
 
 
-capnp_nowarn struct TestJoinResult {
+zap_nowarn struct TestJoinResult {
 };
 
 static const size_t TestJoinResult_word_count = 0;
@@ -1711,13 +1711,13 @@ enum TestNameAnnotation_badlyNamedUnion_which {
 
 struct TestNameAnnotation {
 	enum TestNameAnnotation_which which;
-	capnp_nowarn union {
+	zap_nowarn union {
 		unsigned badFieldName : 1;
 		int8_t bar;
 	};
 	enum TestNameAnnotation_BadlyNamedEnum anotherBadFieldName;
 	enum TestNameAnnotation_badlyNamedUnion_which badlyNamedUnion_which;
-	capnp_nowarn union {
+	zap_nowarn union {
 		/* struct { -empty- } badlyNamedGroup; */
 		TestNameAnnotation_NestedStruct_ptr baz;
 	} badlyNamedUnion;

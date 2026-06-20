@@ -1,5 +1,5 @@
 /* vim: set sw=8 ts=8 sts=8 noet: */
-/* capnp_c.h
+/* zap_c.h
  *
  * Copyright (C) 2013 James McKaskill
  * Copyright (C) 2014 Steve Dee
@@ -8,8 +8,8 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-#ifndef CAPNP_C_H
-#define CAPNP_C_H
+#ifndef ZAP_C_H
+#define ZAP_C_H
 
 #include <stdint.h>
 #include <stdio.h>
@@ -279,7 +279,7 @@ int capn_init_fp(struct capn *c, FILE *f, int packed);
 int capn_init_mem(struct capn *c, const uint8_t *p, size_t sz, int packed);
 
 /* capn_size() calculates the amount of memory required to serialise the given
- * Cap'n Proto structure in the unpacked format. It does NOT apply to packed
+ * ZAP structure in the unpacked format. It does NOT apply to packed
  * serialisation, as that may (in rare cases) actually become bigger than the
  * input. A buffer of this size can then be passed to capn_write_mem() without
  * fear of truncation (again, only in the unpacked case).

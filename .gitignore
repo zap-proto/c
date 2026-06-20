@@ -25,11 +25,12 @@ tests/*.out
 *.lo
 *.la
 
-capn-test
-capnpc-c
-c-capnproto.pc
+zap-test
+zapc-c
+c-zap.pc
 
 *.tar.gz
 
 subprojects/googletest-*
 subprojects/packagecache
+subprojects/.wraplock

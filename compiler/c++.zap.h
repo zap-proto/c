@@ -1,17 +1,17 @@
 #ifndef CAPN_BDF87D7BB8304E81
 #define CAPN_BDF87D7BB8304E81
 /* AUTO GENERATED - DO NOT EDIT */
-#include <capnp_c.h>
+#include <zap_c.h>
 
 #if CAPN_VERSION != 1
-#error "version mismatch between capnp_c.h and generated code"
+#error "version mismatch between zap_c.h and generated code"
 #endif
 
-#ifndef capnp_nowarn
+#ifndef zap_nowarn
 # ifdef __GNUC__
-#  define capnp_nowarn __extension__
+#  define zap_nowarn __extension__
 # else
-#  define capnp_nowarn
+#  define zap_nowarn
 # endif
 #endif
 

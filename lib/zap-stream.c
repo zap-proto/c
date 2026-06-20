@@ -1,5 +1,5 @@
 /* vim: set sw=8 ts=8 sts=8 noet: */
-/* capn-stream.c
+/* zap-stream.c
  *
  * Copyright (C) 2013 James McKaskill
  *
@@ -7,8 +7,8 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-#include "capnp_c.h"
-#include "capnp_priv.h"
+#include "zap_c.h"
+#include "zap_priv.h"
 #include <string.h>
 
 #ifndef min

@@ -1,4 +1,4 @@
-/* capn-test.cpp
+/* zap-test.cpp
  *
  * Copyright (C) 2013 James McKaskill
  *
@@ -12,8 +12,8 @@
 static int g_AddTag = 1;
 #define ADD_TAG g_AddTag
 
-#include "capn.c"
-#include "capn-malloc.c"
+#include "zap.c"
+#include "zap-malloc.c"
 
 template <int wordCount>
 union AlignedData {

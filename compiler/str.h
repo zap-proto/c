@@ -7,7 +7,7 @@
  * of the MIT license.  See the LICENSE file for details.
  */
 
-#include <capnp_c.h>
+#include <zap_c.h>
 #include <stdlib.h>
 #include <stdarg.h>
 
