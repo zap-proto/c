@@ -1,0 +1,15 @@
+c — part of the ZAP Protocol (github.com/zap-proto)
+
+This product includes software developed by the c-capnproto project:
+  c-capnproto — https://github.com/opensourcerouting/c-capnproto
+    (originally https://github.com/jmckaskill/c-capnproto)
+  Copyright (c) 2013 James McKaskill
+  Licensed under the MIT License (see COPYING).
+
+The generated runtime keeps the upstream `capn_` ABI prefix for source
+compatibility with c-capnproto consumers.
+
+ZAP is a derivative work: a brand-neutral fork of c-capnproto providing the
+`zapc-c` code-generator plugin and the C runtime library, driven by the `zap`
+schema compiler.
+Modifications Copyright (c) 2025 Lux Industries Inc.
