@@ -1,7 +1,5 @@
 project('zap-c', ['c','cpp'], meson_version: '>=1.0.0', default_options : ['c_std=c99', 'cpp_std=c++17'])
 
-cc = meson.get_compiler('c')
-
 common_c_args = []
 common_cpp_args = ['-std=c++17']
 libzap_c_args = []
@@ -54,14 +52,11 @@ if get_option('enable_tests') and not meson.is_subproject()
   gtest_dep = gtest_proj.get_variable('gtest_dep')
   gmock_dep = gtest_proj.get_variable('gmock_dep')
 
+  # Sanitizer runtimes are pulled in by the compiler driver via the
+  # -fsanitize flags that meson's b_sanitize option adds to both compile
+  # and link steps. No explicit find_library() is needed (and Apple clang
+  # ships no findable libasan/libubsan), so b_sanitize alone is portable.
   test_dependencies = [libzap_dep, gtest_dep, gmock_dep, thread_dep]
-
-  if get_option('b_sanitize').contains('address')
-    test_dependencies += cc.find_library('asan')
-  endif
-  if get_option('b_sanitize').contains('undefined')
-    test_dependencies += cc.find_library('ubsan')
-  endif
 
   exe = executable('zap-test', zap_test_src,
       include_directories: include_directories(['lib', 'tests', 'compiler']),
