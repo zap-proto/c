@@ -212,17 +212,26 @@ static void header_calc(struct capn *c, uint32_t *headerlen, size_t *headersz)
 	*headersz = 4 * *headerlen;
 }
 
+/* The header pointer is not guaranteed to be 4-byte aligned: callers derive
+ * it from a caller-supplied byte buffer (capn_write_mem) or deliberately
+ * offset it by two bytes (capn_write_mem_packed). Store each little-endian
+ * word with memcpy, the portable UB-free way to do an unaligned store. The
+ * bytes written are identical to a direct uint32_t store. */
+static void store_header_u32(uint32_t *header, size_t idx, uint32_t val) {
+	memcpy((char*)header + idx * sizeof(uint32_t), &val, sizeof(val));
+}
+
 static int header_render(struct capn *c, struct capn_segment *seg, uint32_t *header, uint32_t headerlen, size_t *datasz)
 {
 	size_t i;
 
-	header[0] = capn_flip32(c->segnum - 1);
-	header[headerlen-1] = 0; /* Zero out the spare position in the header sizes */
+	store_header_u32(header, 0, capn_flip32(c->segnum - 1));
+	store_header_u32(header, headerlen-1, 0); /* Zero out the spare position in the header sizes */
 	for (i = 0; i < c->segnum; i++, seg = seg->next) {
 		if (0 == seg)
 			return -1;
 		*datasz += seg->len;
-		header[1 + i] = capn_flip32(seg->len / 8);
+		store_header_u32(header, 1 + i, capn_flip32(seg->len / 8));
 	}
 	if (0 != seg)
 		return -1;

@@ -29,11 +29,19 @@ jobs:
       uses: actions/checkout@v4
     - name: Install meson and ninja
       run: pip3 install --user meson ninja
-    - name: Run Unit Tests with ASAN
+    - name: Run Unit Tests with ASAN + UBSan (halt on error)
       env:
         ASAN_OPTIONS: detect_leaks=0,detect_odr_violation=0,allocator_may_return_null=1
+        # Make UBSan a real gate: abort on the first diagnostic instead of
+        # printing and continuing. -fno-sanitize-recover=undefined makes the
+        # generated traps fatal at the instruction level; halt_on_error=1 is
+        # the matching runtime backstop. Any UB now fails the job.
+        UBSAN_OPTIONS: halt_on_error=1,print_stacktrace=1
       run: |
         export PATH=${HOME}/.local/bin:${PATH}
-        meson setup -Dbuildtype=debugoptimized -Db_sanitize=address,undefined build
+        meson setup -Dbuildtype=debugoptimized -Db_sanitize=address,undefined \
+          -Dc_args=-fno-sanitize-recover=undefined \
+          -Dcpp_args=-fno-sanitize-recover=undefined \
+          build
         meson compile -C build
         build/zap-test

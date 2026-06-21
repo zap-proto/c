@@ -481,7 +481,12 @@ err:
 }
 
 static void write_ptr_tag(char *d, capn_ptr p, int off) {
-	uint64_t val = U64(U32(I32(off/8) << 2));
+	/* off/8 is a signed word offset (pointers may point backward, so it
+	 * can be negative). The tag stores it as a signed 30-bit value in
+	 * bits 2-31; read_ptr recovers it via (int32_t)(val) >> 2. Shift in
+	 * unsigned space to avoid UB from left-shifting a negative int while
+	 * producing the identical two's-complement bit pattern. */
+	uint64_t val = U64(U32(off/8) << 2);
 
 	switch (p.type) {
 	case CAPN_STRUCT:
@@ -701,7 +706,13 @@ static int copy_ptr(struct capn_segment *seg, char *data, struct capn_ptr *t, st
 		n->fend = fend;
 
 		*xcp = &n->hdr;
-		n->hdr.parent = &cp->hdr;
+		/* cp is the tree node we descended to in the loop above, i.e.
+		 * the parent of the slot *xcp. When the copy tree was empty the
+		 * loop never ran and cp is NULL, meaning n is the new root and
+		 * has no parent. capn_tree_insert treats a NULL parent as the
+		 * root sentinel (Case 1). Guard the member access so we never
+		 * form &cp->hdr through a null pointer. */
+		n->hdr.parent = cp ? &cp->hdr : NULL;
 
 		c->copy = capn_tree_insert(c->copy, &n->hdr);
 	}
