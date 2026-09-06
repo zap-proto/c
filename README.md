@@ -39,7 +39,47 @@ build/zap-test
 
 ## Usage
 
-### Generating C code from a `.zap` schema file
+### Reading a `.zap` schema: `zapgen`
+
+`zapgen` reads a ZAP schema and writes the C it describes. Schemas are
+written whitespace-significant — indentation opens a block, and each field
+takes the next free byte after the one before it:
+
+```
+package echo
+
+struct Ping
+    Seq    u64
+    Sender bytes_fixed[32]
+    Note   text
+
+interface Echo
+    ping(req: Ping) returns (resp: Pong)
+```
+
+```sh
+zapgen echo.zap          # writes echo.zap.h beside the input
+zapgen -o gen echo.zap   # writes it into gen/
+zapgen -c echo.zap       # reads the schema and says nothing if it holds
+zapgen -d echo.zap       # writes the brace form of the schema to stdout
+```
+
+The brace form — `struct S { A u8 @0 }`, every field carrying its byte —
+is the same language said explicitly, and a file already written that way
+passes through `zapgen -d` byte for byte. The two styles may be mixed one
+declaration at a time.
+
+The generated header gives each struct a view over the message bytes and
+one reader per field, each taking its value from a fixed offset. Reading is
+in place: nothing is copied, and no reader can step outside the message.
+Include `<zap_view.h>` — it comes with the library — and the header the
+schema produced.
+
+This is the same schema language, read the same way, as
+[ZAP for Go](https://github.com/zap-proto/go); the two front ends are
+checked against each other on every schema in the estate.
+
+### Generating C code from a Cap'n Proto schema
 
 The `compiler` directory contains the C language plugin (`zapc-c`) for use with
 the `zap` tool.

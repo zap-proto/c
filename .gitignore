@@ -27,7 +27,13 @@ tests/*.out
 
 zap-test
 zapc-c
+zapgen-test
 c-zap.pc
+
+zapgen
+
+# generated from zapgen/echo.zap by the build
+echo.zap.h
 
 *.tar.gz
 

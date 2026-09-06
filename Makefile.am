@@ -19,7 +19,8 @@ EXTRA_DIST += compiler/c.zap
 zap_DATA = compiler/c.zap
 AM_CPPFLAGS = \
 	-I${srcdir}/compiler \
-	-I${srcdir}/lib
+	-I${srcdir}/lib \
+	-I${srcdir}/gen
 
 lib_LTLIBRARIES += libzap_c.la
 libzap_c_la_LDFLAGS = -version-info 0:0:0
@@ -37,7 +38,32 @@ zapc_c_SOURCES = \
 	compiler/str.c
 zapc_c_LDADD = libzap_c.la
 include_HEADERS += \
-	lib/zap_c.h
+	lib/zap_c.h \
+	lib/zap_view.h
+
+# zapgen reads a .zap schema - written either way, indentation or braces -
+# and writes the C it describes.
+ZAPGEN_SOURCES = \
+	gen/arena.c \
+	gen/desugar.c \
+	gen/emit.c \
+	gen/parse.c \
+	gen/rune.c \
+	compiler/str.c
+
+bin_PROGRAMS += zapgen
+zapgen_SOURCES = $(ZAPGEN_SOURCES) gen/main.c
+noinst_HEADERS += \
+	gen/arena.h \
+	gen/desugar.h \
+	gen/emit.h \
+	gen/parse.h \
+	gen/rune.h \
+	gen/schema.h
+EXTRA_DIST += \
+	gen/echo.zap \
+	gen/table/main.go \
+	gen/table/go.mod
 
 noinst_HEADERS += \
 	lib/zap_priv.h \
@@ -81,7 +107,18 @@ zap_test_CPPFLAGS = $(AM_CPPFLAGS) $(GTEST_CPPFLAGS)
 zap_test_CXXFLAGS = -std=gnu++17 -pthread
 zap_test_LDADD = libzap_c.la $(GTEST_LDADD)
 zap_test_LDFLAGS = -pthread
-TESTS = zap-test
+
+# The schema test generates its own bindings from gen/echo.zap and
+# compiles them, so a generator that cannot generate, or generates C that
+# does not build, fails the suite rather than the next release.
+check_PROGRAMS += zapgen-test
+zapgen_test_SOURCES = $(ZAPGEN_SOURCES) gen/test.c
+BUILT_SOURCES = echo.zap.h
+CLEANFILES = echo.zap.h
+echo.zap.h: $(srcdir)/gen/echo.zap zapgen$(EXEEXT)
+	./zapgen$(EXEEXT) -o . $(srcdir)/gen/echo.zap
+
+TESTS = zap-test zapgen-test
 
 ZAP_SCHEMA_FILES := $(shell find . -type f -name \*.zap)
 

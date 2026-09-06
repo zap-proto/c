@@ -34,6 +34,24 @@ zapc_c = executable('zapc-c', zapc_src,
       c_args : common_c_args,
 )
 
+# zapgen reads a .zap schema - written either way, indentation or braces -
+# and writes the C it describes.
+zapgen_lib_src = [
+  'gen' / 'arena.c',
+  'gen' / 'desugar.c',
+  'gen' / 'emit.c',
+  'gen' / 'parse.c',
+  'gen' / 'rune.c',
+  'compiler' / 'str.c',
+]
+
+zapgen_inc = include_directories(['gen', 'compiler', 'lib'])
+
+zapgen = executable('zapgen', zapgen_lib_src + ['gen' / 'main.c'],
+      include_directories: zapgen_inc,
+      c_args : common_c_args,
+)
+
 zap_test_src = [
   'tests' / 'zap-test.cpp',
   'tests' / 'zap-stream-test.cpp',
@@ -68,5 +86,22 @@ if get_option('enable_tests') and not meson.is_subproject()
       implicit_include_directories: false
     )
   test('zap-test', exe)
+
+  # The schema test generates its own bindings and compiles them, so a
+  # generator that cannot generate, or generates C that does not build,
+  # fails the suite rather than the next release.
+  echo_h = custom_target('echo.zap.h',
+      input: 'gen' / 'echo.zap',
+      output: 'echo.zap.h',
+      command: [zapgen, '-o', '@OUTDIR@', '@INPUT@'],
+    )
+
+  zapgen_test = executable('zapgen-test',
+      zapgen_lib_src + ['gen' / 'test.c', echo_h],
+      include_directories: zapgen_inc,
+      c_args : common_c_args,
+      install: false,
+    )
+  test('zapgen-test', zapgen_test)
 
 endif
